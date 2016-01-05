@@ -1,3 +1,3 @@
 # DjangoOnAWS
-My personal Django [website](www.tangcongyuan.com) hosted on AWS.
+My personal Django [website](http://tangcongyuan.com) hosted on AWS.
 
