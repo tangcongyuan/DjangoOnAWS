@@ -4,7 +4,7 @@ My personal Django [website](http://tangcongyuan.com) hosted on AWS.
 ## Connect via SSH
 Use this to connect to AWS instance:
 ```shell
-ssh -i "tangcongyuancom.pem" ubuntu@ec2-54-84-129-124.compute-1.amazonaws.com
+ssh -i "tangcongyuancom.pem" ubuntu@ec2-54-164-192-80.compute-1.amazonaws.com
 ```
 
 ## Set up working environment with [virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
