@@ -1,3 +1,9 @@
+# Django default db file
+*.sqlite3
+
+# Intellij meta data
+.idea/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
