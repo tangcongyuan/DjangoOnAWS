@@ -37,15 +37,14 @@ Then do a quick ```pip freeze```. Voila, now install Django and other packages; 
 * Django==1.9.1
 * gunicorn==19.4.5
 * psycopg2==2.6.1
-* wheel==0.26.0
 * ...
 
 
 ## Google as a friend
-1. Register my website at Google Web Master(Now called Webmaster Tools, also, for faster indexing on the web, I registered Bing Webster Tools).
-2. Utilize Google Apps for work, create my "company", tangcongyuan.com. 
-3. Sign in through Google Admin, and set security to "Less secure apps", otherwise Google will stop suspicous login to your account.
-4. Set up Django email settings, connect to smtp.google.com. More specifically:
+* Register my website at Google Web Master(Now called Webmaster Tools, also, for faster indexing on the web, I registered Bing Webster Tools).
+* Utilize Google Apps for work, create my "company", tangcongyuan.com. 
+* Sign in through Google Admin, and set security to "Less secure apps", otherwise Google will stop suspicous login to your account.
+* Set up Django email settings, connect to smtp.google.com. More specifically:
 ```python
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -55,26 +54,26 @@ EMAIL_USE_TLS = True
 #DEFAULT_FROM_EMAIL = 'erictang@tangcongyuan.com'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 ```
-5. Testing Gmail connection in Django shell```python manage.py shell```:
+* Testing Gmail connection in Django shell```python manage.py shell```:
 ```python
 from django.core.mail import send_mail
 send_mail('Subject', 'Message.', 'from@example.com', ['john@example.com', 'jane@example.com'])
 ```
-6. Implement the "contact_me" function in Controller, or should I say View?
+* Implement the "contact_me" function in Controller, or should I say View?
 
 ## Correct way to start and stop gunicorn for Django web app
-Start:
+* Start:
 ```shell
 gunicorn tangcongyuan_com.wsgi --daemon
 ```
 This will start one process running one thread listening on 127.0.0.1:8000. It requires that your project be on the Python path; the simplest way to ensure that is to run this command from the same directory as your manage.py file.
 
-Stop:
+* Stop:
 ```shell
 pkill gunicorn
 ```
 
-Other useful commands:
+* Other useful commands:
 ```shell
 gunicorn django_project.wsgi:application --bind=127.0.0.1:8866 --daemon
 ```
