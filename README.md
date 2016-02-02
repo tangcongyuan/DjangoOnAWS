@@ -34,15 +34,33 @@ After installation, I chose python3 in my newly created virtual environment:
 virtualenv -p python3 my_vir_env
 ```
 Then do a quick ```pip freeze```. Voila, now install Django and other packages; here is the list:
-* Django 1.9.1
+* Django==1.9.1
 * gunicorn==19.4.5
 * psycopg2==2.6.1
 * wheel==0.26.0
 * ...
 
 
-## Using Gmail as mail server
-
+## Google as a friend
+1. Register my website at Google Web Master(Now called Webmaster Tools, also, for faster indexing on the web, I registered Bing Webster Tools).
+2. Utilize Google Apps for work, create my "company", tangcongyuan.com. 
+3. Sign in through Google Admin, and set security to "Less secure apps", otherwise Google will stop suspicous login to your account.
+4. Set up Django email settings, connect to smtp.google.com. More specifically:
+```python
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'erictang@tangcongyuan.com'
+EMAIL_HOST_PASSWORD = 'secret'
+EMAIL_USE_TLS = True
+#DEFAULT_FROM_EMAIL = 'erictang@tangcongyuan.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+```
+5. Testing Gmail connection in Django shell```python manage.py shell```:
+```python
+from django.core.mail import send_mail
+send_mail('Subject', 'Message.', 'from@example.com', ['john@example.com', 'jane@example.com'])
+```
+6. Implement the "contact_me" function in Controller, or should I say View?
 
 ## Correct way to start and stop gunicorn for Django web app
 Start:
