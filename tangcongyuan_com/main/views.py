@@ -28,7 +28,7 @@ def contact_me(request):
     from_email = request.POST.get('email', '')
     if name and message and from_email:
         try:
-            send_mail("Message from: " + name, message, from_email, ['erictang@tangcongyuan.com'])
+            send_mail("Message from: " + name + ", " + from_email, message, from_email, ['erictang@tangcongyuan.com'])
             send_mail("Confirmation email sent", "Hello "+name+",\nYour email has been recieved by me. I'll get back to you asap. Thanks!\nEric (Congyuan) Tang", "erictang@tangcongyuan.com", [from_email])
         except BadHeaderError:
             return JsonResponse({'message': 'Invalid header found.'})
