@@ -1,6 +1,21 @@
-$(function() {
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
-    $("#contactFrom input,#contactForm textarea").jqBootstrapValidation({
+$(function() {
+    $("#contactForm input, #contactForm textarea").jqBootstrapValidation({
         preventSubmit: true,
         submitError: function($form, event, errors) {
             // additional error messages or events
@@ -20,6 +35,9 @@ $(function() {
             if (firstName.indexOf(' ') >= 0) {
                 firstName = name.split(' ').slice(0, -1).join(' ');
             }
+
+            var csrftoken = getCookie('csrftoken');
+
             $.ajax({
                 url: "/contact_me",
                 type: "POST",
@@ -27,10 +45,11 @@ $(function() {
                     name: name,
                     phone: phone,
                     email: email,
-                    message: message
+                    message: message,
+                    csrfmiddlewaretoken: csrftoken // Passing Django's csrf security layer.
                 },
                 cache: false,
-                success: function() {
+                success: function(data) {
                     // Enable button & show success message
                     $("#btnSubmit").attr("disabled", false);
                     $('#success').html("<div class='alert alert-success'>");
@@ -49,7 +68,7 @@ $(function() {
                     $('#success').html("<div class='alert alert-danger'>");
                     $('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
                         .append("</button>");
-                    $('#success > .alert-danger').append("<strong>Sorry " + firstName + ", it seems that my mail server is not responding. Please try again later!");
+                    $('#success > .alert-danger').append("<strong>Sorry " + firstName + ", Eric is still setting up his mail server. Please contact him using the social media below, thank you!");
                     $('#success > .alert-danger').append('</div>');
                     //clear all fields
                     $('#contactForm').trigger("reset");
