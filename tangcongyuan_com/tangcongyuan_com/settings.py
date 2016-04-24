@@ -132,7 +132,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Mail server related config
 
-with open('BASE_DIR/password.txt', 'r') as f:
+with open(os.path.join(BASE_DIR, "password.txt"), 'r') as f:
     password = f.read()
 
 EMAIL_HOST = 'smtp.gmail.com'
