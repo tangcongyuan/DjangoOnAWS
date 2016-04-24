@@ -140,5 +140,5 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'erictang@tangcongyuan.com'
 EMAIL_HOST_PASSWORD = password
 EMAIL_USE_TLS = True
-#DEFAULT_FROM_EMAIL = 'erictang@tangcongyuan.com'
+DEFAULT_FROM_EMAIL = 'erictang@tangcongyuan.com'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
