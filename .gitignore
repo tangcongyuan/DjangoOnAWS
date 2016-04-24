@@ -1,3 +1,6 @@
+# Password file for mail server
+password.txt
+
 # Django default db file
 *.sqlite3
 
