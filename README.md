@@ -101,9 +101,11 @@ This is the right place to inject more concept: the connection between Nginx and
 My Nginx conf file is located in ```/etc/nginx/sites-available/tangcongyuan_com```
 ```
 server {
-  listen 80;
-  server_name tangcongyuan.com www.tangcongyuan.com;
-  root /home/ubuntu/tangcongyuan_com/DjangoOnAWS/tangcongyuan_com;
+  listen 443 ssl;
+  server_name tangcongyuan.com www.tancongyuan.com;
+
+  ssl_certificate /etc/letsencrypt/live/tangcongyuan.com/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/tangcongyuan.com/privkey.pem;
 
   location = /favicon.ico { access_log off; log_not_found off; }
   location ~ /static/ {
@@ -119,6 +121,13 @@ server {
     proxy_pass http://unix:/home/ubuntu/tangcongyuan_com/DjangoOnAWS/tangcongyuan_com/tangcongyuan_com.sock;
   }
 }
+
+server {
+  listen 80;
+  server_name tangcongyuan.com www.tangcongyuan.com;
+  return 301 https://$host$request_uri;
+}
+
 
 ```
 Name it whatever you want, but do remember to create a symbolic link in ```/etc/nginx/sites-enabled/``` as Nginx will look up in that folder.
@@ -173,22 +182,54 @@ sudo service gunicorn start
 ## Enabling HTTPS
 Free stuff is the best stuff!
 
-Getting a certificate from [Let's Encrypt](https://letsencrypt.org/).
+Getting a certificate from [Let's Encrypt](https://letsencrypt.org/), a [Certificate Authority](https://en.wikipedia.org/wiki/Certificate_authority).
 
-```
-./certbot-auto certonly -a webroot --webroot-path=/home/ubuntu/tangcongyuan_com/DjangoOnAWS/tangcongyuan_com -d tangcongyuan.com -d www.tangcongyuan.com
-```
+Follow the instructions from [Cerbot](https://certbot.eff.org/#ubuntutrusty-nginx) (Certbot is an easy-to-use automatic client that fetches and deploys SSL/TLS certificates for your webserver):
+* Installation
+  ```
+  wget https://dl.eff.org/certbot-auto
+  
+  chmod a+x certbot-auto
+  
+  ./certbot-auto
+  ```
+* Using "webroot" to obtain a certificate
 
-### Future work.
-```
-IMPORTANT NOTES:
- - Congratulations! Your certificate and chain have been saved at
-   /etc/letsencrypt/live/tangcongyuan.com/fullchain.pem. Your cert
-   will expire on 2016-10-19. To obtain a new or tweaked version of
-   this certificate in the future, simply run certbot-auto again. To
-   non-interactively renew *all* of your certificates, run
-   "certbot-auto renew"
-```
+  Let's Encrypt provides a variety of ways to obtain SSL certificates, through various plugins, and one of them is "webroot".
+
+  To obtain a cert using the "webroot" plugin, which can work with the webroot directory of any webserver software: 
+  ```
+  ./certbot-auto certonly -a webroot --webroot-path=/home/ubuntu/tangcongyuan_com/DjangoOnAWS/tangcongyuan_com -d tangcongyuan.com -d www.tangcongyuan.com
+  ```
+  --webroot-path here should be our "root" path in Nginx configuration file (in ```/etc/nginx/sites-available/tangcongyuan_com```), where Let's Encrypt will use for validation.
+
+  If everything falls into place, you should see an output message that looks something like this:
+  ```
+  IMPORTANT NOTES:
+   - Congratulations! Your certificate and chain have been saved at
+     /etc/letsencrypt/live/tangcongyuan.com/fullchain.pem. Your cert
+     will expire on 2016-10-19. To obtain a new or tweaked version of
+     this certificate in the future, simply run certbot-auto again. To
+     non-interactively renew *all* of your certificates, run
+     "certbot-auto renew"
+  ```
+* Certificate files
+
+  After successfully authenticated by Let's Encrypt, we'll have 4 different kinds of files in ```/etc/letsencrypt/archive```:
+  * <b>cert.pem</b>: Your domain's certificate
+  * <b>chain.pem</b>: The Let's Encrypt chain certificate
+  * <b>fullchain.pem</b>: ```cert.pem``` and ```chain.pem``` combined
+  * <b>privkey.pem</b>: Your certificate's private key
+
+  However, Let's Encrypt creates symbolic links to the most recent certificate files in the ```/etc/letsencrypt/live/tangcongyuan.com``` directory.
+
+  In our Nginx config file, I've configure my web server to use ```fullchain.pem``` as the certificate file, and ```privkey.pem``` as the certificate key file.
+  ```
+  ssl_certificate /etc/letsencrypt/live/tangcongyuan.com/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/tangcongyuan.com/privkey.pem;
+  ```
+  
+* Using a strong Diffie-Hellman group... Or not!
 
 ## Working with Django Rest Framework
 ### Future work.
