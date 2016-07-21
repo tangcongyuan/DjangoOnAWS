@@ -1,4 +1,5 @@
 # DjangoOnAWS
+## How to set up a production Django web app using Nginx, Gunicorn, and AWS free tier(Ubuntu 14.04) instance.
 My personal Django [website](http://tangcongyuan.com) hosted on AWS.
 
 ## Setting up with Amazon EC2
@@ -61,7 +62,7 @@ send_mail('Subject', 'Message.', 'from@example.com', ['john@example.com', 'jane@
 ```
 * Implement the "contact_me" function in Controller, or should I say View?
 
-## Correct way to start and stop gunicorn for Django web app
+## Correct way to start and stop gunicorn for Django web app(obsolete)
 * Start:
 ```shell
 gunicorn tangcongyuan_com.wsgi --daemon
@@ -80,3 +81,80 @@ gunicorn django_project.wsgi:application --bind=127.0.0.1:8866 --daemon
 ```shell
 ps ax|grep gunicorn
 ```
+
+## Why do I need Gunicorn and Nginx
+Before we set up Gunicorn and Nginx, we need to understand what is Gunicorn and Nginx. [Here](https://www.quora.com/What-are-the-differences-between-nginx-and-gunicorn) is a good link.
+
+To simply sum up, Nginx is a HTTP/proxy server which dealing with clients/browsers requests and/or hand them over to Gunicorn for further response; Gunicorn is an application server which takes requests from Nginx and translate them into [Web Server Gateway Interface](https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface) compatible requests and calls Django/Flask web framework's request handler method.
+
+An even simpler explaination:
+
+    clients <==> Nginx <==> Gunicorn <==> Django or Flask( <==> Database)
+
+So why do I need Gunicorn and Nginx? The default Django are optimized for development and perform poorly on production, and Gunicorn and Nginx make our Python web app production-ready by some black magic.
+
+[Without this buffering(Nginx) Gunicorn will be easily susceptible to denial-of-service attacks.](http://docs.gunicorn.org/en/latest/deploy.html)
+
+This is the right place to inject more concept: the connection between Nginx and Gunicorn could be using [Web socket](https://en.wikipedia.org/wiki/WebSocket), and [Unix domain socket](https://en.wikipedia.org/wiki/Unix_domain_socket). Of course there are more fancy ways, but these are two methods I've experimented. Shame on me; I picked Unix domain socket with absolutely no good reason, except that my Nginx server and Gunicorn server are located on one AWS instance.
+
+## Configurating Nginx
+My Nginx conf file is located in ```/etc/nginx/sites-available/tangcongyuan_com```
+```
+server {
+  listen 80;
+  server_name tangcongyuan.com www.tangcongyuan.com;
+  root /home/ubuntu/tangcongyuan_com/DjangoOnAWS/tangcongyuan_com;
+
+  location = /favicon.ico { access_log off; log_not_found off; }
+  location ~ /static/ {
+    root /home/ubuntu/tangcongyuan_com/DjangoOnAWS/tangcongyuan_com;
+  }
+
+  location ~ /.well-known {
+    allow all;
+  }
+
+  location / {
+    include proxy_params;
+    proxy_pass http://unix:/home/ubuntu/tangcongyuan_com/DjangoOnAWS/tangcongyuan_com/tangcongyuan_com.sock;
+  }
+}
+
+```
+Name it whatever you want, but do remember to create a symbolic link in ```/etc/nginx/sites-enabled/``` as Nginx will look up in that folder.
+
+```
+sudo ln -s /etc/nginx/sites-available/tangcongyuan_com /etc/nginx/sites-enabled/tangcongyuan_com
+```
+
+"root" is important for enabling HTTPS connection later.
+
+### Future work.
+
+## Configurating Gunicorn
+### Future work.
+
+## Enabling HTTPS
+Free stuff is the best stuff!
+
+Getting a certificate from [Let's Encrypt](https://letsencrypt.org/).
+
+### Future work.
+```
+IMPORTANT NOTES:
+ - Congratulations! Your certificate and chain have been saved at
+   /etc/letsencrypt/live/tangcongyuan.com/fullchain.pem. Your cert
+   will expire on 2016-10-19. To obtain a new or tweaked version of
+   this certificate in the future, simply run certbot-auto again. To
+   non-interactively renew *all* of your certificates, run
+   "certbot-auto renew"
+```
+
+## Working with Django Rest Framework
+### Future work.
+
+## Working with ReactJS and Webpack module bundler
+### Future work.
+
+## Working with AngularJS
+### Future work.
