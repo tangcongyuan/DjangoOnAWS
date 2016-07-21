@@ -235,6 +235,22 @@ Follow the instructions from [Cerbot](https://certbot.eff.org/#ubuntutrusty-ngin
   
   This is not implemented in my server, so please don't attack me with [Logjam](https://en.wikipedia.org/wiki/Logjam_(computer_security)).
 
+* Automating renewal
+  
+  Let's Encrypt certificates last for 90 days, so it's highly advisable to renew them automatically! You can test automatic renewal for your certificates by running this command:
+  ```
+  ./path/to/certbot-auto renew --dry-run
+  ```
+  If that appears to be working correctly, you can arrange for automatic renewal by adding a ```cron``` or ```systemd``` job which runs the following:
+  ```
+  ./path/to/certbot-auto renew --quiet --no-self-upgrade
+  ```
+  Note:
+  
+  if you're setting up a ```cron``` or ```systemd``` job, [we](https://certbot.eff.org/#ubuntutrusty-nginx) recommend running it twice per day (it won't do anything until your certificates are due for renewal or revoked, but running it regularly would give your site a chance of staying online in case a Let's Encrypt-initiated revocation happened for some reason). Please select a random minute within the hour for your renewal tasks.
+  
+
+
 ## Working with Django Rest Framework
 ### Future work.
 
