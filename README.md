@@ -213,7 +213,7 @@ Follow the instructions from [Cerbot](https://certbot.eff.org/#ubuntutrusty-ngin
      non-interactively renew *all* of your certificates, run
      "certbot-auto renew"
   ```
-* Certificate files
+* Tell Nginx about our certificate files
 
   After successfully authenticated by Let's Encrypt, we'll have 4 different kinds of files in ```/etc/letsencrypt/archive```:
   * <b>cert.pem</b>: Your domain's certificate
@@ -229,7 +229,11 @@ Follow the instructions from [Cerbot](https://certbot.eff.org/#ubuntutrusty-ngin
   ssl_certificate_key /etc/letsencrypt/live/tangcongyuan.com/privkey.pem;
   ```
   
+  So if the above Nginx config file is the most updated one, just sit back and look pretty!
+  
 * Using a strong Diffie-Hellman group... Or not!
+  
+  This is not implemented in my server, so please don't attack me with [Logjam](https://en.wikipedia.org/wiki/Logjam_(computer_security)).
 
 ## Working with Django Rest Framework
 ### Future work.
