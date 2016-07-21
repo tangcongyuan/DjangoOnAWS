@@ -140,7 +140,7 @@ sudo service nginx reload
 ```
 
 ## Configurating Gunicorn
-### Future work.
+Configuration and minitoring are specified in the next section.
 
 ## Monitoring Gunicorn
 There are lots of service monitors out there and make sure that when using them you do not enable the Gunicorn's daemon mode. These monitors expect that the process they launch will be the process they need to monitor. Daemonizing will fork-exec which creates an unmonitored process and generally just confuses the monitor services.
@@ -174,6 +174,10 @@ sudo service gunicorn start
 Free stuff is the best stuff!
 
 Getting a certificate from [Let's Encrypt](https://letsencrypt.org/).
+
+```
+./certbot-auto certonly -a webroot --webroot-path=/home/ubuntu/tangcongyuan_com/DjangoOnAWS/tangcongyuan_com -d tangcongyuan.com -d www.tangcongyuan.com
+```
 
 ### Future work.
 ```
