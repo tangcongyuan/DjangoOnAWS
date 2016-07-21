@@ -124,12 +124,20 @@ server {
 Name it whatever you want, but do remember to create a symbolic link in ```/etc/nginx/sites-enabled/``` as Nginx will look up in that folder.
 
 ```
-sudo ln -s /etc/nginx/sites-available/tangcongyuan_com /etc/nginx/sites-enabled/tangcongyuan_com
+sudo ln -s /etc/nginx/sites-available/tangcongyuan_com /etc/nginx/sites-enabled
 ```
 
 "root" is important for enabling HTTPS connection later.
 
-### Future work.
+Test Nginx configuration file for syntex error by ```sudo nginx -t```
+
+If everything's good, restart or reload Nginx: 
+```
+sudo service nginx restart
+```
+```
+sudo service nginx reload
+```
 
 ## Configurating Gunicorn
 ### Future work.
