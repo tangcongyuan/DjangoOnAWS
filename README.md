@@ -134,6 +134,34 @@ sudo ln -s /etc/nginx/sites-available/tangcongyuan_com /etc/nginx/sites-enabled/
 ## Configurating Gunicorn
 ### Future work.
 
+## Monitoring Gunicorn
+There are lots of service monitors out there and make sure that when using them you do not enable the Gunicorn's daemon mode. These monitors expect that the process they launch will be the process they need to monitor. Daemonizing will fork-exec which creates an unmonitored process and generally just confuses the monitor services.
+
+I chose to use [Upstart](http://docs.gunicorn.org/en/latest/deploy.html#upstart); it's simple enough for a fool like me.
+
+/etc/init/gunicorn.conf:
+```
+description "Gunicorn application server handling tangcongyuan_com"
+
+start on runlevel [2345]
+stop on runlevel [!2345] # stop when the system is rebooting, shutting down, or in single-user mode
+
+respawn                  # automatically restart the service if it fails
+setuid ubuntu            # run under user
+setgid ubuntu            # run under group (use "group username" to check affiliated group)
+chdir /home/ubuntu/tangcongyuan_com/DjangoOnAWS/tangcongyuan_com
+
+# the Gunicorn executable is stored within the virtual environment
+# use Unix socket instead of a network port to communicate with Nginx
+exec /home/ubuntu/tangcongyuan_com/env/bin/gunicorn --workers 3 --bind unix:/home/ubuntu/tangcongyuan_com/DjangoOnAWS/tangcongyuan_com/tangcongyuan_com.sock tangcongyuan_com.wsgi:application
+```
+
+Don't forget to start Gunicorn service! Although it will start itselt when the instance bootup.
+
+```
+sudo service gunicorn start
+```
+
 ## Enabling HTTPS
 Free stuff is the best stuff!
 
