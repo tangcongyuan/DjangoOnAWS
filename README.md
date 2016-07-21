@@ -41,7 +41,7 @@ Then do a quick ```pip freeze```. Voila, now install Django and other packages; 
 * ...
 
 
-## Google as a friend
+## Google as a friend who lends me a mail server
 * Register my website at Google Web Master(Now called Webmaster Tools, also, for faster indexing on the web, I registered Bing Webster Tools).
 * Utilize Google Apps for work, create my "company", tangcongyuan.com. 
 * Sign in through Google Admin, and set security to "Less secure apps", otherwise Google will stop suspicous login to your account.
