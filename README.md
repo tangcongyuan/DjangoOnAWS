@@ -235,6 +235,11 @@ Follow the instructions from [Cerbot](https://certbot.eff.org/#ubuntutrusty-ngin
 
   There is a very good tutorial about how to set this up, [here](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-14-04).
   
+  From this tutorial: you can use the Qualys SSL Labs Report to see how your server configuration scores:
+  ```
+  https://www.ssllabs.com/ssltest/analyze.html?d=tangcongyuan.com
+  ```
+  
   This is not implemented in my server, so please don't attack me with [Logjam](https://en.wikipedia.org/wiki/Logjam_(computer_security)).
 
 * Automating renewal
