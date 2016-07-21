@@ -232,6 +232,8 @@ Follow the instructions from [Cerbot](https://certbot.eff.org/#ubuntutrusty-ngin
   So if the above Nginx config file is the most updated one, just sit back and look pretty!
   
 * Using a strong Diffie-Hellman group... Or not!
+
+  There is a very good tutorial about how to set this up, [here](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-14-04).
   
   This is not implemented in my server, so please don't attack me with [Logjam](https://en.wikipedia.org/wiki/Logjam_(computer_security)).
 
