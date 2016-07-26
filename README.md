@@ -136,6 +136,8 @@ Name it whatever you want, but do remember to create a symbolic link in ```/etc/
 sudo ln -s /etc/nginx/sites-available/tangcongyuan_com /etc/nginx/sites-enabled
 ```
 
+Don't forget to delete the old default config file for Nginx!
+
 "root" is important for enabling HTTPS connection later.
 
 Test Nginx configuration file for syntex error by ```sudo nginx -t```
